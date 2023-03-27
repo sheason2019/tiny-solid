@@ -1,0 +1,26 @@
+{
+  "name": "tiny-solid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./jsx-runtime": {
+      "import": "./dist/jsx-runtime/index.js",
+      "require": "./dist/jsx-runtime/index.js",
+      "default": "./dist/jsx-runtime/index.js",
+      "types": "./dist/jsx-runtime/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
