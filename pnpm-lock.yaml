@@ -32,8 +32,11 @@ importers:
   test:
     specifiers:
       tiny-solid: workspace:*
+      vite: ^4.2.1
     dependencies:
       tiny-solid: link:../package
+    devDependencies:
+      vite: 4.2.1
 
 packages:
 

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "target": "es2016",
-    "module": "CommonJS",
+    "module": "ES2015",
     "moduleResolution": "node",
     "outDir": "dist",
     "esModuleInterop": true,

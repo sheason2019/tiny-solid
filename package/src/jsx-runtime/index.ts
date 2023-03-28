@@ -1,3 +1,5 @@
-export const jsx = (label: string) => {
-  console.log('create label', label);
+export const jsx = (tagName: string): Element => {
+  const el = document.createElement(tagName);
+  
+  return el;
 };

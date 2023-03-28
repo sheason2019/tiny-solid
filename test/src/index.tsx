@@ -1,8 +1,14 @@
-import { h } from "tiny-solid";
+import { h, createSignal } from "tiny-solid";
 
 const App = () => {
-  return <div>123</div>;
+  const [count, setCount] = createSignal<number>(0);
+
+  return (
+    <div>
+      <div>{count()}</div>
+      <button onClick={() => setCount(count() + 1)}>increment</button>
+    </div>
+  );
 };
 
-App();
-export default App;
+h(<App />, document.getElementById("app")!);
