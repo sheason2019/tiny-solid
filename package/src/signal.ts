@@ -7,16 +7,17 @@ export function createSignal<T extends any>(initValue: T) {
 
   const getter = () => {
     const dep = REACT_SCOPE.Listener;
-    console.log("add dep", dep);
-    depCollection.add(dep);
+    if (dep) {
+      depCollection.add(dep);
+    }
 
     return value;
   };
   const setter = (next: T) => {
-    depCollection.forEach((v) => {
-      console.log("effect dep:", v);
-    });
     value = next;
+    depCollection.forEach((v) => {
+      v();
+    });
   };
   return [getter, setter] as [() => T, (value: T) => void];
 }

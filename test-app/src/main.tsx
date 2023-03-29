@@ -5,8 +5,8 @@ const App = () => {
 
   return (
     <div>
-      <div>{count()}</div>
-      <button onClick={() => setCount(count() + 1)}>increment</button>
+      <div>{() => count()}</div>
+      <button onclick={() => () => setCount(count() + 1)}>increment</button>
     </div>
   );
 };
