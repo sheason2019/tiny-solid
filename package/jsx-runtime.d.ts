@@ -1,7 +1,7 @@
 export namespace JSX {
   interface IntrinsicElements {
-    div: any;
-    button: any;
-    span: any;
+    div: { children?: any };
+    button: { onclick: () => () => any };
+    span: {};
   }
 }

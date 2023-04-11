@@ -24,7 +24,7 @@ Vue 在前端开发领域的名声可谓是耳熟能详，在最初，Vue 经常
 
 如果大家还有印象，在 2022 年，前端开发领域出现了两名可以被称为超新星的框架，它们分别是 Solid.js 和 Svelte。
 
-而今天的主题就是分享 Solid.js 这个框架实现响应性的秘诀，同时自己动手实现一个简易的响应性 JSX Demo。
+而今天的主题就是分享 Solid.js 这个框架实现响应性的秘诀，同时仿造 Solid.js 实现一个简易的响应性 JSX Demo。
 
 # Solid.js 与 Signals
 
@@ -132,16 +132,48 @@ export namespace JSX {
 }
 ```
 
-# Tiny Solid
+同时，Typescript 还为 JSX 提供了基础的编译能力，只需要在`tsconfig.json`文件中添加`compileOptions`属性：`"jsx": "rect-jsx"`，在执行 tsc 命令时，Typescript 就会自动将 TSX 编译成 JavaScript，而无需使用 Babel 来转译 JSX 文件。
 
-1. 介绍 Solidjs
+# 如何实现基于 JSX、Signals 和 Typescript 的响应式框架
 
-2. 介绍 Solidjs 的 Signal 风格响应性设计（编译阶段以及 runtime 阶段）
+上面的内容比较笼统和发散，而在接下来的阶段，我们需要把注意力集中到一个问题上：如何实现一个类似 Solid.js 的 JSX 框架？
 
-3. 介绍 Typescript 对于 JSX 的支持
+通过前文累积的线索，我们可以把这个问题分解成两个主要的部分：
 
-4. 介绍实现一个 JSX Demo 所需的工作
+1. 实现 JSX
 
-5. 介绍如何实现三大原语
+2. 实现 Signals 响应性
 
-6. 展示 test-app 的源码及页面
+## 如何实现 JSX
+
+在 Typescript 中，如果想要自定义具有类型提示的 TSX，则需要对 tsconfig 文件中的`jsx`属性和`jsxImportSource`属性进行配置，当开发者启用 JSX 并指定 `jsxImportSource` 属性后，TypeScript 会在 `jsxImportSource` 指定的依赖目录下寻找 `jsx-runtime.d.ts` 文件，并引用其中的 `jsx.IntrinsicElements` 类型作为 TSX 标签的类型声明。
+
+完成这一工作后，我们就已经可以在项目中进行基础的 JSX 编程，但在这一阶段，JSX 还无法被正确编译为 DOM，因为我们还没有编写 JSX 的处理函数。
+
+在该项目下的`package/jsx-runtime/index.ts`中，程序导出了一个`jsx`函数，Typescript 对 TSX 编译的产物会引用这个函数，以处理开发者编写的 TSX 标签，这一函数会将开发者编写的 TSX 标签转换为 DOM 树，到这一阶段，基本就已经实现了一个简单的 JSX。
+
+但通常的前端框架（如 React）还会提供一个组件的挂载函数，如 React.createRoot，我们这里也实现一个简单的 h 函数实现组件的挂载：
+
+```ts
+export const h = (el: Element, mountEl: Element) => {
+  mountEl?.replaceChildren(el);
+};
+```
+
+这样 JSX 就完成了。
+
+## 如何实现 Signals 响应性
+
+在前面的分享中其实已经提及到了 Signals 的原理，Signals 的响应性主要是通过一个由指针实现的栈进行自动化依赖收集实现的，只要把握好这个方向，我们可以很快编写出类似于 React 中 State hook 和 Effect hook 的两种主要的原语。
+
+代码可见`package/signal.ts`和`package/effect.ts`。
+
+基于这两个原语，我们可以很容易的实现出近似`useMemo`的 hook，代码可见`package/memo.ts`。
+
+这样一来，基本的 Signals 响应性设计也可以算告一段落了。
+
+## 成果
+
+基于上面完成的内容，我使用 Vite 启动了一个原生 Typescript 应用，并在`src/main.tsx`下编写了一个基础的 Counter 页面。
+
+以上就是本次技术分享的全部内容。

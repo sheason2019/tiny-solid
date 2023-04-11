@@ -41,9 +41,10 @@ export const jsx = (tag: string | Component, props: Props): Element => {
         }
       };
 
+      const temp = REACT_SCOPE.Listener;
       REACT_SCOPE.Listener = attrSetter;
       attrSetter();
-      REACT_SCOPE.Listener = null;
+      REACT_SCOPE.Listener = temp;
     });
 
     return el;
